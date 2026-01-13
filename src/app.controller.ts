@@ -13,4 +13,8 @@ export class AppController {
   getGelato(): string {
     return 'gelato 4시에 오픈함';
   }
+  @Get('arom')
+  getArom(): string {
+    return '아롬베이크';
+  }
 }
