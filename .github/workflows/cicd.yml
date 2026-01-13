@@ -33,3 +33,14 @@ jobs:
 
       - name: Build project
         run: npm run build
+
+  CD:
+    needs: CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install -g @railway/cli
+      - run: railway up --service=cicd_nest
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - run: echo "🚀 Railway Deploy"
