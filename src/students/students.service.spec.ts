@@ -31,7 +31,7 @@ describe('StudentsService', () => {
 
     service = module.get<StudentsService>(StudentsService);
   });
-  it('학생 생성 테스트', () => {
+  it('학생 생성 테스트', async () => {
     const createDto = {
       name: '유나',
       email: 'yuna@example.com',
@@ -42,9 +42,15 @@ describe('StudentsService', () => {
     //save함수가 실행되면, promise 성공 케이스 돌려줌
     mockRepo.save.mockResolvedValue({ ...createDto, id: 1, isActive: true });
 
-    const result = service.create(createDto);
+    const result = await service.create(createDto);
     expect(result).toBeDefined();
-    expect(result).toBe('This action adds a new student');
+    expect(result).toHaveProperty('id');
+    expect(result).toHaveProperty('isActive');
+    expect(result.name).toBe(createDto.name);
+    expect(result.email).toBe(createDto.email);
+    expect(result.age).toBe(createDto.age);
+    expect(mockRepo.create).toHaveBeenCalledWith(createDto);
+    expect(mockRepo.save).toHaveBeenCalledWith(createDto);
   });
   it('학생 생성 테스트 - 패스트 체크 버전', async () => {
     await fc.assert(
